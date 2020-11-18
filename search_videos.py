@@ -1,7 +1,7 @@
 from googleapiclient.discovery import build
 
-#youtube api key
-youtube_api_key = 'AIzaSyACtD8D34hwm44lqQU_gwoTL5207HMWls8'
+#enter your youtube api key
+youtube_api_key = ''
 
 def search_videos(q,max_results=10,order='relevance',token=None,location=None,location_radius=None):
 
