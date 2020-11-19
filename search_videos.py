@@ -1,11 +1,12 @@
 from googleapiclient.discovery import build
 
 #enter your youtube api key
-youtube_api_key = 'AIzaSyACtD8D34hwm44lqQU_gwoTL5207HMWls8'
+youtube_api_key = ''
 #build the service object
 youtube_service = build('youtube','v3',developerKey=youtube_api_key)
 
-def search_videos(q,max_results=3,order='relevance',token=None,location=None,location_radius=None):
+
+def search_videos(q,max_results=1,order='relevance',token=None,location=None,location_radius=None):
 
     search_response = youtube_service.search().list(
         q=q,
