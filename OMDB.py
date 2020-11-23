@@ -1,8 +1,9 @@
 import json
 import requests
 import os
+import sqlite3
 
-apikey = 'eba65681'
+# apikey = 'eba65681'
 
 def read_cache(CACHE_FNAME):
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -57,6 +58,20 @@ def get_data(title, CACHE_FNAME):
         except:
             print('Exception')
             return None
+
+# def add_ratings_from_json(cur, conn):
+#     dir_path = os.path.dirname(os.path.realpath(__file__))
+#     filename = dir_path + '/' + "cache_movie.json"
+#     with open(filename, 'r') as f:
+#         json_data = json.loads(f)
+    
+#     conn = sqlite3.connect(path + '/' + 'movie_ratings.db')
+#     cur = conn.cursor()
+
+#     cur.execute('CREATE TABLE IF NOT EXISTS')
+#     cur.execute('')
+#     for x in json_data:
+
 
 # dir_path = os.path.dirname(os.path.realpath(__file__))
 # CACHE_FNAME = dir_path + '/' + "cache_movie.json"
