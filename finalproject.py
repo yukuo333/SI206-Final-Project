@@ -156,10 +156,10 @@ def create_movie_table(cur, conn):
 
 
 
-def main():
-    cur, conn = setUpDatabase('movie_name.db')
-    create_movie_table(cur, conn)
+# def main():
+#     cur, conn = setUpDatabase('movie_name.db')
+#     create_movie_table(cur, conn)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

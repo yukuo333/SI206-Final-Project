@@ -3,7 +3,7 @@ import requests
 import os
 import sqlite3
 
-# apikey = 'eba65681'
+apikey = 'eba65681'
 
 def read_cache(CACHE_FNAME):
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -27,6 +27,23 @@ def OMDB_API(title):
     url = f'http://www.omdbapi.com/?t={title}&apikey={apikey}&type=movie&plot=short&r=json'
     return url
 
+def normalize_ratings(rating_list):
+    sum = 0.0
+    count = 0
+    for rating in rating_list:
+        if rating['Source'] == 'Internet Movie Database':
+            sum = sum + float(rating['Value'][0:2])
+            count = count + 1
+        elif rating['Source'] == 'Rotten Tomatoes':
+            sum = sum + float(rating['Value'].strip('%'))/10
+            count = count + 1
+        elif rating['Source'] == 'Metacritic':
+            sum = sum + float(rating['Value'][0:2])/10
+            count = count + 1
+    if count == 0:
+        return None
+    return round(float(sum)/count,1)
+
 def get_data(title, CACHE_FNAME):
     request_url = OMDB_API(title)
     json_dict = read_cache(CACHE_FNAME)
@@ -35,7 +52,9 @@ def get_data(title, CACHE_FNAME):
         empty_list = []
         empty_dict = {}
         empty_dict['Title'] = json_dict[request_url]['Title']
-        empty_dict['Ratings'] = json_dict[request_url]['Ratings']
+        empty_dict['Ratings'] = normalize_ratings(json_dict[request_url]['Ratings'])
+        empty_dict['Year'] = json_dict[request_url]['Year']
+        empty_dict['Genre'] = json_dict[request_url]['Genre']
         empty_list.append(empty_dict)
         return empty_list
     else:
@@ -49,29 +68,16 @@ def get_data(title, CACHE_FNAME):
                 json_dict[request_url] = py_data
                 write_cache(CACHE_FNAME, json_dict)
                 empty_dict['Title'] = json_dict[request_url]['Title']
-                empty_dict['Ratings'] = json_dict[request_url]['Ratings']
+                empty_dict['Ratings'] = normalize_ratings(json_dict[request_url]['Ratings'])
+                empty_dict['Year'] = json_dict[request_url]['Year']
+                empty_dict['Genre'] = json_dict[request_url]['Genre']
                 empty_list.append(empty_dict)
                 return empty_list
             else:
-                # print('Movie not found!')
                 return None
         except:
             print('Exception')
             return None
-
-# def add_ratings_from_json(cur, conn):
-#     dir_path = os.path.dirname(os.path.realpath(__file__))
-#     filename = dir_path + '/' + "cache_movie.json"
-#     with open(filename, 'r') as f:
-#         json_data = json.loads(f)
-    
-#     conn = sqlite3.connect(path + '/' + 'movie_ratings.db')
-#     cur = conn.cursor()
-
-#     cur.execute('CREATE TABLE IF NOT EXISTS')
-#     cur.execute('')
-#     for x in json_data:
-
 
 # dir_path = os.path.dirname(os.path.realpath(__file__))
 # CACHE_FNAME = dir_path + '/' + "cache_movie.json"

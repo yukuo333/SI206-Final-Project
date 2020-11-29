@@ -1,12 +1,13 @@
 from googleapiclient.discovery import build
+import sqlite3
+import os
 
 #enter your youtube api key
 youtube_api_key = ''
 #build the service object
 youtube_service = build('youtube','v3',developerKey=youtube_api_key)
 
-
-def search_videos(q,max_results=1,order='relevance',token=None,location=None,location_radius=None):
+def search_videos(q,max_results=1,order='viewCount',token=None,location=None,location_radius=None,publishedDate = '2018-01-01T00:00:00Z'):
 
     search_response = youtube_service.search().list(
         q=q,
@@ -16,7 +17,8 @@ def search_videos(q,max_results=1,order='relevance',token=None,location=None,loc
         part = "id,snippet",
         maxResults = max_results,
         location = location,
-        locationRadius = location_radius
+        locationRadius = location_radius,
+        publishedAfter = publishedDate
     ).execute()
 
     videos = []
@@ -57,4 +59,3 @@ def create_video_list(q):
     
     return videos_list
 
-print(create_video_list('League of Legends'))
