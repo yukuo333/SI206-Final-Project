@@ -3,7 +3,7 @@ import sqlite3
 import os
 
 #enter your youtube api key
-youtube_api_key = ''
+youtube_api_key = 'AIzaSyACtD8D34hwm44lqQU_gwoTL5207HMWls8'
 #build the service object
 youtube_service = build('youtube','v3',developerKey=youtube_api_key)
 

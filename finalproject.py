@@ -145,7 +145,7 @@ def create_movie_table(cur, conn):
         print("soup created")
         namelist, datelist = getMonth(soup, "wikitable sortable")
     else:
-        print(f"Problem with getting heml from {url}")
+        print(f"Problem with getting html from {url}")
         print(r.status_code)
 
     cur.execute("DROP TABLE IF EXISTS Movies")
