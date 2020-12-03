@@ -96,7 +96,6 @@ def plot_rating_based_on_genre(cur,conn):
     axes1.grid()
     plt.savefig(source_dir + '/plots/genre_pie.png')
 
-    plt.show()
 
 def plot_rating_based_on_month(cur,conn):
     month_rating = defaultdict(list)

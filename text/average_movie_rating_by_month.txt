@@ -1,16 +1,16 @@
 Movie Ratings by Month based on OMDB data
-Movies premiered in January have an average rating of 4.28.
-Movies premiered in February have an average rating of 4.91.
+Movies premiered in January have an average rating of 4.2.
+Movies premiered in February have an average rating of 4.85.
 Movies premiered in March have an average rating of 6.01.
 Movies premiered in April have an average rating of 5.2.
 Movies premiered in May have an average rating of 4.75.
 Movies premiered in June have an average rating of 5.37.
 Movies premiered in July have an average rating of 5.8.
 Movies premiered in August have an average rating of 5.62.
-Movies premiered in September have an average rating of 5.67.
+Movies premiered in September have an average rating of 5.73.
 Movies premiered in October have an average rating of 5.36.
 Movies premiered in November have an average rating of 6.87.
-Movies premiered in December have an average rating of 7.08.
+Movies premiered in December have an average rating of 6.9.
 
 Movie Ratings by Month based on Youtube Likes Percentage
 Likes percentage of movies premiered in January is 94.0%.
