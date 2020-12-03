@@ -78,12 +78,3 @@ def get_data(title, CACHE_FNAME):
         except:
             print('Exception')
             return None
-
-# dir_path = os.path.dirname(os.path.realpath(__file__))
-# CACHE_FNAME = dir_path + '/' + "cache_movie.json"
-# movie_list = ["The Terminator" ,"Monsters, Inc.", "Inside Out", 'V for Vendetta',"My Neighbor Totoro", "Coco",'WALL·E','Aladdin', "Brave", "Cinderella", "The Little Mermaid", "Up", "Frozen", "Moana", "Princess and the Frog", "Snow White and the Seven Drawfs", "Toy Story", "Toy Story 2", "Toy Story 3", "Tangled", "Mulan", "Sleeping Beauty", "The Sword in the Stone"]
-# [get_data(movie, CACHE_FNAME) for movie in movie_list]
-# print(CACHE_FNAME)
-# print(get_data('The Terminator', CACHE_FNAME))
-# for movie in movie_list:
-#     print(get_data(movie, CACHE_FNAME))
