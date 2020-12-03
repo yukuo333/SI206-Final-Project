@@ -178,13 +178,13 @@ def plot_rating_based_on_month(cur,conn):
 
 def main():
     cur, conn = setUpDatabase('movie_name.db')
-    #create_movie_table(cur, conn)
-    #create_omdb_table(cur,conn)
-    #create_youtube_table(cur,conn)
-    #insert_youtube_data(cur,conn)
-    #plot_rating_based_on_genre(cur,conn)
+    create_movie_table(cur, conn)
+    create_omdb_table(cur,conn)
+    # create_youtube_table(cur,conn)
+    insert_youtube_data(cur,conn)
+    plot_rating_based_on_genre(cur,conn)
     plot_rating_based_on_month(cur,conn)
-    #plot_youtube_rating(cur,conn)
+
 
 
 if __name__ == "__main__":
