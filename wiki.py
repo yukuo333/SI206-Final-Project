@@ -8,16 +8,16 @@ import os
 
 def getLink(soup):
     tag = soup.find('a', title='List of American films of 2020 - Wikipedia')
-    # print(tag)
+    print(tag)
     info = "https://en.wikipedia.org"+tag.get('href')
-    # print("getLink worked")
+    print("getLink worked")
     return info
-    
+
 def getMonth(soup, table_class):
     month_list=[]
     alist=[]
     tags = soup.find_all('table',class_=table_class)
-
+    
     for i in tags:
         text=i.get_text()
         # remove col titles
@@ -25,17 +25,17 @@ def getMonth(soup, table_class):
         texts = texts[15:]
         alist.append(texts)
     
-
-    alist = sum(alist, [])
     
+    alist = sum(alist, [])
 
-    namelist=[]
-    datelist=[]
-    month = "00" # default: month is wrong
-    date = "00" # default: month is wrong
-    # month_skip_flag = 1 # 1 means month attribute is present
-    # date_skip_flag = 1 # 1 means date attribute is present
-    after_film_name = 0 # 0 means we haven't got to the film name yet
+
+namelist=[]
+datelist=[]
+month = "00" # default: month is wrong
+date = "00" # default: month is wrong
+# month_skip_flag = 1 # 1 means month attribute is present
+# date_skip_flag = 1 # 1 means date attribute is present
+after_film_name = 0 # 0 means we haven't got to the film name yet
     
     for i in range(len(alist)):
         if alist[i].startswith("[") and alist[i].endswith("]"):
@@ -95,7 +95,40 @@ def getMonth(soup, table_class):
             datelist.append(month + date)
             after_film_name = 1
 
-    return namelist, datelist
+# for i in range(len(alist)):
+#     if alist[i].startswith("[") and alist[i].endswith("]"):
+#         temp_dict={}
+#         inner_i = 0
+#         continue
+
+#     if alist[inner_i] == "JANUARY":
+#         month = "01"
+#         month_skip_flag = 1
+#     elif alist[inner_i] == "FEBRUARY":
+#         month = "02"
+#         month_skip_flag = 1
+#     elif alist[inner_i] == "MARCH":
+#         month = "03"
+#         month_skip_flag = 1
+#     else:
+#         month_skip_flag = 0
+
+#     # if inner_i == 0:
+#     #     month = alist[inner_i]
+
+#     if inner_i == 2:
+#         date = alist[i]
+#         if len(date) == 1:
+#             date = "0" + date
+
+#     if inner_i == 4:
+#         film = alist[i]
+#         temp_dict[film] = month + date
+#         month_list.append(temp_dict)
+
+#     inner_i += 1
+
+return namelist, datelist
 
 def setUpDatabase(db_name):
     path = os.path.dirname(os.path.abspath(__file__))
@@ -107,16 +140,26 @@ def create_movie_table(cur, conn):
     url="https://en.wikipedia.org/wiki/List_of_American_films_of_2020"
     r = requests.get(url, verify=False, timeout=60)
     if r.ok:
-        # print("request got")
+        print("request got")
         soup = BeautifulSoup(r.text,'html.parser')
-        # print("soup created")
+        print("soup created")
         namelist, datelist = getMonth(soup, "wikitable sortable")
     else:
-        print(f"Problem with getting html from {url}")
+        print(f"Problem with getting heml from {url}")
         print(r.status_code)
-
+    
     cur.execute("DROP TABLE IF EXISTS Movies")
     cur.execute("CREATE TABLE Movies (id INTEGER PRIMARY KEY, name TEXT, date TEXT)")
     for i in range(len(namelist)):
         cur.execute("INSERT INTO Movies (id,name,date) VALUES (?,?,?)",(i,namelist[i],datelist[i]))
     conn.commit()
+
+
+
+def main():
+    cur, conn = setUpDatabase('movie_name.db')
+    create_movie_table(cur, conn)
+
+
+if __name__ == "__main__":
+    main()
