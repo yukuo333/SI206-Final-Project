@@ -27,23 +27,19 @@ def getMonth(soup, table_class):
     
     
     alist = sum(alist, [])
-
-
-namelist=[]
-datelist=[]
-month = "00" # default: month is wrong
-date = "00" # default: month is wrong
-# month_skip_flag = 1 # 1 means month attribute is present
-# date_skip_flag = 1 # 1 means date attribute is present
-after_film_name = 0 # 0 means we haven't got to the film name yet
+    namelist=[]
+    datelist=[]
+    month = "00" # default: month is wrong
+    date = "00" # default: month is wrong
+    # month_skip_flag = 1 # 1 means month attribute is present
+    # date_skip_flag = 1 # 1 means date attribute is present
+    after_film_name = 0 # 0 means we haven't got to the film name yet
     
     for i in range(len(alist)):
         if alist[i].startswith("[") and alist[i].endswith("]"):
             temp_dict={}
             after_film_name = 0
             continue
-        
-        
         if alist[i] == "JANUARY":
             month = "01"
             continue
@@ -94,6 +90,8 @@ after_film_name = 0 # 0 means we haven't got to the film name yet
             namelist.append(alist[i])
             datelist.append(month + date)
             after_film_name = 1
+    print(namelist)
+    return namelist, datelist
 
 # for i in range(len(alist)):
 #     if alist[i].startswith("[") and alist[i].endswith("]"):
@@ -127,8 +125,6 @@ after_film_name = 0 # 0 means we haven't got to the film name yet
 #         month_list.append(temp_dict)
 
 #     inner_i += 1
-
-return namelist, datelist
 
 def setUpDatabase(db_name):
     path = os.path.dirname(os.path.abspath(__file__))
