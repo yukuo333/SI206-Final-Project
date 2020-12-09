@@ -47,13 +47,16 @@ def insert_youtube_data(cur,conn):
         test = cur.fetchone()[0]
         if test == 0:
             print(movie_title[0])
-            temp_movie = create_video_list(movie_title[0]+' Trailer 2020')
-            title = movie_title[0]
-            likes = temp_movie[0]['likes']
-            dislikes = temp_movie[0]['dislikes']
-            views = temp_movie[0]['viewCount']
-            cur.execute('INSERT OR IGNORE INTO Youtube (title,likes,dislikes,views) VALUES (?,?,?,?)',(title,likes,dislikes,views))
-            conn.commit()
+            try:
+                temp_movie = create_video_list(movie_title[0]+' Trailer 2020')
+                title = movie_title[0]
+                likes = temp_movie[0]['likes']
+                dislikes = temp_movie[0]['dislikes']
+                views = temp_movie[0]['viewCount']
+                cur.execute('INSERT OR IGNORE INTO Youtube (title,likes,dislikes,views) VALUES (?,?,?,?)',(title,likes,dislikes,views))
+                conn.commit()
+            except:
+                print('You have reached the daily limit of Youtube API credit! Try again tomorrow')
 
 def plot_rating_based_on_genre(cur,conn):
     cur.execute('SELECT * FROM OMDB')
@@ -174,8 +177,9 @@ def plot_rating_based_on_month(cur,conn):
     ind = np.arange(N)
     fig2,axes2 = plt.subplots(figsize = (8,6))
     # print(list(month_rating.values())[0:11])
+    # print(youtube_dict.values())
     p1 = axes2.bar(ind,list(month_rating.values())[0:11],width = bar_width,label = 'OMDB',color = 'cornflowerblue')
-    p2 = axes2.bar(ind + bar_width,youtube_dict.values(),width = bar_width,label = 'Youtube',color = 'tomato')
+    p2 = axes2.bar(ind + bar_width,list(youtube_dict.values())[0:11],width = bar_width,label = 'Youtube',color = 'tomato')
     axes2.set_xticks(ind + bar_width/2)
     axes2.set_ylim(0,11)
     axes2.set(ylabel = 'Rating Out of 10',title = 'Average Movie Ratings by Month')
@@ -189,7 +193,6 @@ def main():
     cur, conn = setUpDatabase('movie_name.db')
     create_movie_table(cur, conn)
     create_omdb_table(cur,conn)
-    # create_youtube_table(cur,conn)
     insert_youtube_data(cur,conn)
     plot_rating_based_on_genre(cur,conn)
     plot_rating_based_on_month(cur,conn)
