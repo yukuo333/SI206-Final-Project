@@ -13,8 +13,7 @@ def create_omdb_table(cur,conn):
     cur.execute("CREATE TABLE OMDB (id INTEGER PRIMARY KEY, title TEXT, rating REAL,genre TEXT,year INTEGER)")
     cur.execute('SELECT name FROM Movies')
     movie_list = cur.fetchall()
-    x = 0
-    for movie in movie_list[x:x+25]:
+    for movie in movie_list:
         if type(get_data(movie[0],CACHE_FNAME)) == list:
             movie_dt = get_data(movie[0],CACHE_FNAME)[0]
             if movie_dt['Year'] == '2020' and movie_dt['Ratings'] != None:
