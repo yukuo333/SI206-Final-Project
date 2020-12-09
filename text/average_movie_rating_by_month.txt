@@ -14,13 +14,13 @@ Movies premiered in December have an average rating of 6.9.
 
 Movie Ratings by Month based on Youtube Likes Percentage
 Likes percentage of movies premiered in January is 94.0%.
-Likes percentage of movies premiered in February is 94.0%.
+Likes percentage of movies premiered in February is 93.0%.
 Likes percentage of movies premiered in March is 96.0%.
 Likes percentage of movies premiered in April is 91.0%.
 Likes percentage of movies premiered in May is 95.0%.
 Likes percentage of movies premiered in June is 93.0%.
 Likes percentage of movies premiered in July is 92.0%.
-Likes percentage of movies premiered in August is 94.0%.
+Likes percentage of movies premiered in August is 92.0%.
 Likes percentage of movies premiered in September is 96.0%.
 Likes percentage of movies premiered in October is 91.0%.
 Likes percentage of movies premiered in November is 94.0%.

@@ -13,8 +13,7 @@ def create_omdb_table(cur,conn):
     cur.execute("CREATE TABLE OMDB (id INTEGER PRIMARY KEY, title TEXT, rating REAL,genre TEXT,year INTEGER)")
     cur.execute('SELECT name FROM Movies')
     movie_list = cur.fetchall()
-    x = 0
-    for movie in movie_list[x:x+25]:
+    for movie in movie_list:
         if type(get_data(movie[0],CACHE_FNAME)) == list:
             movie_dt = get_data(movie[0],CACHE_FNAME)[0]
             if movie_dt['Year'] == '2020' and movie_dt['Ratings'] != None:
@@ -30,10 +29,20 @@ def create_youtube_table(cur,conn):
     cur.execute('CREATE TABLE IF NOT EXISTS Youtube (title TEXT PRIMARY KEY,likes INTEGER, dislikes INTEGER,views INTEGER)')
 
 def insert_youtube_data(cur,conn):
+    cur.execute('SELECT title FROM Youtube')
+    youtube_titles = cur.fetchall()
+    
     cur.execute('SELECT title FROM OMDB')
     movie_titles = cur.fetchall()
-    x = 143 #start from 126
-    for movie_title in movie_titles[x:x+5]:
+
+    new_list = []
+    for g in movie_titles:
+        if g not in youtube_titles:
+            new_list.append(g)
+            if len(new_list) == 5:
+                break
+
+    for movie_title in new_list:
         cur.execute('SELECT EXISTS(SELECT 1 FROM Youtube WHERE title = ? LIMIT 1)',(movie_title[0],))
         test = cur.fetchone()[0]
         if test == 0:
