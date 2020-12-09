@@ -29,7 +29,7 @@ def getMonth(soup, table_class):
     alist = sum(alist, [])
     namelist=[]
     datelist=[]
-    month = "00" # default: month is wrong
+    month = "00" # default: month is wrong 
     date = "00" # default: month is wrong
     # month_skip_flag = 1 # 1 means month attribute is present
     # date_skip_flag = 1 # 1 means date attribute is present
