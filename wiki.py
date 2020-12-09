@@ -90,7 +90,7 @@ def getMonth(soup, table_class):
             namelist.append(alist[i])
             datelist.append(month + date)
             after_film_name = 1
-    print(namelist)
+    # print(namelist)
     return namelist, datelist
 
 # for i in range(len(alist)):
@@ -152,10 +152,10 @@ def create_movie_table(cur, conn):
 
 
 
-def main():
-    cur, conn = setUpDatabase('movie_name.db')
-    create_movie_table(cur, conn)
+# def main():
+#     cur, conn = setUpDatabase('movie_name.db')
+#     create_movie_table(cur, conn)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

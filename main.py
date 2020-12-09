@@ -1,4 +1,4 @@
-from finalproject import *
+from wiki import *
 from OMDB import *
 from search_videos import *
 import sqlite3
