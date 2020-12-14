@@ -9,8 +9,7 @@ import numpy as np
 def create_omdb_table(cur,conn):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     CACHE_FNAME = dir_path + '/' + "cache_movie.json"
-    cur.execute("DROP TABLE IF EXISTS OMDB")
-    cur.execute("CREATE TABLE OMDB (id INTEGER PRIMARY KEY, title TEXT, rating REAL,genre TEXT,year INTEGER)")
+    cur.execute("CREATE TABLE IF NOT EXISTS OMDB (id INTEGER PRIMARY KEY, title TEXT, rating REAL,genre TEXT,year INTEGER)")
     cur.execute('SELECT name FROM Movies')
     movie_list = cur.fetchall()
 
@@ -77,7 +76,7 @@ def plot_rating_based_on_genre(cur,conn):
         genre_list = datum[3].split(', ')
         for genre in genre_list:
             genre_rating[genre].append(datum[2])
-    
+
     for key in genre_rating:
         genre_rating_count[key] = len(key)
         genre_rating[key] = round(sum(genre_rating[key])/len(genre_rating[key]),2)
@@ -134,12 +133,47 @@ def plot_rating_based_on_month(cur,conn):
     if not os.path.exists(source_dir + '/text'):
         os.mkdir(source_dir + '/text')
 
-    cur.execute('SELECT Movies.date,Youtube.likes,Youtube.dislikes FROM Youtube JOIN Movies ON Youtube.title = Movies.name')
+    cur.execute('SELECT Movies.date,Youtube.likes,Youtube.dislikes,Youtube.views FROM Youtube JOIN Movies ON Youtube.title = Movies.name')
     youtube_ratings = cur.fetchall()
     youtube_dict = defaultdict(list)
+    youtube_likes = defaultdict(list)
+    youtube_views = defaultdict(list)
     for rating in youtube_ratings:
         youtube_dict[str(int(int(rating[0])/100))].append(round(rating[1]/(rating[1]+rating[2]),2))
-    
+        youtube_likes[str(int(int(rating[0])/100))].append((rating[1],rating[2]))
+        youtube_views[str(int(int(rating[0])/100))].append(rating[3])
+
+    for key in youtube_likes:
+        likes = 0
+        dislikes = 0
+        for movie in youtube_likes[key]:
+            likes = likes + movie[0]
+            dislikes = dislikes + movie[1]
+        youtube_likes[key] = likes+dislikes
+
+    for key in youtube_views:
+        youtube_views[key] = sum(youtube_views[key])
+
+    fig4,axes4 = plt.subplots(figsize = (8,6))
+    axes4.bar(youtube_likes.keys(),list(youtube_likes.values()),align='center',color = 'lightcoral')
+    axes4.set_title('Total Likes and Dislikes Count by Month')
+    axes4.set_xlabel('Month')
+    axes4.set_ylabel('Count')
+    axes4.set_xticks(np.arange(len(month_rating)+1))
+    plt.tight_layout()
+    source_dir = os.path.dirname(__file__)
+    plt.savefig(source_dir + '/plots/likes_dislikes_count.png')
+
+    fig5,axes5 = plt.subplots(figsize = (8,6))
+    axes5.bar(youtube_views.keys(),list(youtube_views.values()),align='center',color = 'deepskyblue')
+    axes5.set_title('Total View Count by Month')
+    axes5.set_xlabel('Month')
+    axes5.set_ylabel('Count')
+    axes5.set_xticks(np.arange(len(month_rating)+1))
+    plt.tight_layout()
+    source_dir = os.path.dirname(__file__)
+    plt.savefig(source_dir + '/plots/view_count.png')
+
     for key in youtube_dict:
         youtube_dict[key] = round(sum(youtube_dict[key])/len(youtube_dict[key]),2)*10
 
@@ -182,14 +216,17 @@ def plot_rating_based_on_month(cur,conn):
     
     
     plt.savefig(source_dir + '/plots/month_rating_youtube.png')
-    N = 11
+    if len(list(youtube_dict.values())) < 12:
+        N = int(len(list(youtube_dict.values())))
+    else:
+        N = 11
+
     bar_width = 0.35
     ind = np.arange(N)
     fig2,axes2 = plt.subplots(figsize = (8,6))
-    # print(list(month_rating.values())[0:11])
-    # print(youtube_dict.values())
-    p1 = axes2.bar(ind,list(month_rating.values())[0:11],width = bar_width,label = 'OMDB',color = 'cornflowerblue')
-    p2 = axes2.bar(ind + bar_width,list(youtube_dict.values())[0:11],width = bar_width,label = 'Youtube',color = 'tomato')
+
+    p1 = axes2.bar(ind,list(month_rating.values())[0:N],width = bar_width,label = 'OMDB',color = 'cornflowerblue')
+    p2 = axes2.bar(ind + bar_width,list(youtube_dict.values())[0:N],width = bar_width,label = 'Youtube',color = 'tomato')
     axes2.set_xticks(ind + bar_width/2)
     axes2.set_ylim(0,11)
     axes2.set(ylabel = 'Rating Out of 10',title = 'Average Movie Ratings by Month')
@@ -203,7 +240,8 @@ def main():
     cur, conn = setUpDatabase('movie_name.db')
     create_movie_table(cur, conn)
     create_omdb_table(cur,conn)
-    insert_youtube_data(cur,conn)
+    #create_youtube_table(cur,conn)
+    #insert_youtube_data(cur,conn)
     plot_rating_based_on_genre(cur,conn)
     plot_rating_based_on_month(cur,conn)
 
